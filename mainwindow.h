@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QtWebKit>
 #include <QDesktopWidget>
+#include <QSettings>
 #include <vector>
 #include <pagewindow.h>
 
@@ -16,12 +17,14 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    public:
-        explicit MainWindow(QWidget *parent = 0);
-        ~MainWindow();
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private:
-    PageWindow* views[2];
+
+    std::vector<PageWindow::parameters*> pageSettings;
+    std::vector<PageWindow*> views;
 };
 
 #endif // MAINWINDOW_H

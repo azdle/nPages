@@ -11,7 +11,12 @@ class PageWindow : public QDialog
 {
     Q_OBJECT
 public:
-    explicit PageWindow(QWidget *parent = 0, std::vector<QString*> urls = std::vector<QString*>(0), int display = 0, int interval = 60000);
+    struct parameters{
+        unsigned int display;
+        unsigned int interval;
+        std::vector<QString*> urls;
+    };
+    explicit PageWindow(QWidget *parent = 0, PageWindow::parameters* = new PageWindow::parameters);
 
 private:
     std::vector<QString*> pages;
