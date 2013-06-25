@@ -5,8 +5,8 @@
 #include <QMainWindow>
 #include <QtWebKit>
 #include <QDesktopWidget>
-#include <QDialog>
 #include <vector>
+#include <pagewindow.h>
 
 namespace Ui {
     class MainWindow;
@@ -20,11 +20,8 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
-private slots:
-    void nextPage();
-
 private:
-    QWebView* views[2];
+    PageWindow* views[2];
 };
 
 #endif // MAINWINDOW_H
