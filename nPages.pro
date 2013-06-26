@@ -4,11 +4,12 @@
 #
 #-------------------------------------------------
 
-QT       += core gui webkit
+QT       += core gui webkit network
 
 TARGET = nPages
 TEMPLATE = app
 
+LIBS += -lqjson
 
 SOURCES += main.cpp\
         mainwindow.cpp \

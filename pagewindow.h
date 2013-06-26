@@ -16,10 +16,10 @@ public:
         unsigned int interval;
         std::vector<QString*> urls;
     };
-    explicit PageWindow(QWidget *parent = 0, PageWindow::parameters* = new PageWindow::parameters);
+    explicit PageWindow(QWidget *parent = 0, QVariant = QVariant());
 
 private:
-    std::vector<QString*> pages;
+    QStringList pages;
     QWebView* pageView;
     unsigned int pageIndex;
 
