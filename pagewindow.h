@@ -21,6 +21,7 @@ public:
 private:
     std::vector<QString*> pages;
     QWebView* pageView;
+    unsigned int pageIndex;
 
 private slots:
     void nextPage();

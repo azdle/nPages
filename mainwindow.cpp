@@ -18,9 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // For 1 End
 
     // For 2 Start
-    QString* url2 = new QString("https://portals.exosite.com/views/2219771501/1385257981");
-    std::vector<QString*> urls2(1);
-    urls2[0] = url2;
+    QString* url2a = new QString("https://portals.exosite.com/views/2219771501/1385257981");
+    QString* url2b = new QString("https://mkii.org");
+    std::vector<QString*> urls2(2);
+    urls2[0] = url2a;
+    urls2[1] = url2b;
     PageWindow::parameters *thisSettings2 = new PageWindow::parameters;
     thisSettings2->urls = urls2;
     thisSettings2->display = 1;
