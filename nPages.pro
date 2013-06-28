@@ -17,3 +17,5 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     pagewindow.h
+
+FORMS +=

@@ -17,11 +17,12 @@ public:
         std::vector<QString*> urls;
     };
     explicit PageWindow(QWidget *parent = 0, QVariant = QVariant());
-
+    ~PageWindow();
 private:
     QStringList pages;
     QWebView* pageView;
-    unsigned int pageIndex;
+    int pageIndex;
+    QTimer* reloadTimer;
 
 private slots:
     void nextPage();

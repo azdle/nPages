@@ -15,11 +15,15 @@ PageWindow::PageWindow(QWidget *parent, QVariant parameters) :
     pageView->showFullScreen();
     this->nextPage();
 
-    QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(nextPage()));
-    timer->start(paramMap["interval"].toInt());
+    reloadTimer = new QTimer(this);
+    connect(reloadTimer, SIGNAL(timeout()), this, SLOT(nextPage()));
+    reloadTimer->start(paramMap["interval"].toInt());
 }
 
+PageWindow::~PageWindow(){
+    reloadTimer->stop();
+    pageView->close();
+}
 
 void PageWindow::nextPage(){
     if(pageIndex >= pages.size()){
