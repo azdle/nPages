@@ -109,14 +109,14 @@ void MainWindow::ReadFromExosite(){
 
     std::cout << "Requesting with CIK '" << *cik->toAscii() << "' and alias'" << *datasource_alias->toAscii() << "'." << std::endl;
 
-    QString* base_url = new QString("http://m2.exosite.com/onep:v1/stack/alias?");
+    QString base_url("http://m2.exosite.com/onep:v1/stack/alias?");
 
-    QUrl url(base_url->append(datasource_alias));
-    QNetworkRequest* request = new QNetworkRequest(url);
-    request->setRawHeader(QByteArray("X-Exosite-CIK"), QByteArray("").append(*cik));
-    request->setRawHeader(QByteArray("Accept"), QByteArray("application/x-www-form-urlencoded; charset=utf-8"));
+    QUrl url(base_url.append(datasource_alias));
+    QNetworkRequest request(url);
+    request.setRawHeader(QByteArray("X-Exosite-CIK"), QByteArray("").append(*cik));
+    request.setRawHeader(QByteArray("Accept"), QByteArray("application/x-www-form-urlencoded; charset=utf-8"));
 
-    nam->get(*request);
+    nam->get(request);
 
 }
 
@@ -140,7 +140,8 @@ void MainWindow::NetworkReply(QNetworkReply* reply){
         QString string = QUrl::fromPercentEncoding(bytes); // string
         string.remove(datasource_alias->append("")).remove("=");
         std::cout << "Received Settings with Status " << statusCodeV.toInt() << ": " << string.toStdString() << std::endl;
-        settings = qparse.parse(QByteArray("").append(string), &ok);
+        settings.clear();
+        settings = qparse.parse(QByteArray().append(string), &ok);
         if(!ok){
             settings = QVariant();
             std::cout << "Parse Error!" << std::endl;
@@ -173,7 +174,13 @@ void MainWindow::SaveSettings(){
         exoSettings->setValue("cik", cikEdit->text());
         exoSettings->setValue("alias", aliasEdit->text());
 
+        if(cik != NULL){
+            delete cik;
+        }
         cik = new QString(exoSettings->value("cik").toString());
+        if(datasource_alias != NULL){
+            delete datasource_alias;
+        }
         datasource_alias = new QString(exoSettings->value("alias").toString());
 
         this->hide();
