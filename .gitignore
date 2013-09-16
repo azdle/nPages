@@ -1,2 +1,2 @@
-#Ignore Per-User QtCreator Files
-*.pro.user
+#Ignore Python Files
+*.pyc
