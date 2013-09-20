@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(*args)
 
         self.settings = QSettings("Exosite", "nPages")
+        self.settingsUpdateTime = 0
 
         ### Setup Tray Icon ###
         self.systemTrayIcon = QSystemTrayIcon(self)
@@ -19,6 +20,11 @@ class MainWindow(QMainWindow):
         self.systemTrayIcon.setToolTip("nPages")
         self.systemTrayIcon.setVisible(True)
         self.systemTrayIcon.activated.connect(self.handleSystemTrayIconActivation)
+
+        ### Setup Update Timer ###
+        self.updateTimer = QTimer()
+        self.updateTimer.start(60000) #Check every minute, make this configurable.
+        self.updateTimer.timeout.connect(self.checkForUpdates)
 
         ### Create Elements ###
         self.timeoutBar = QProgressBar()
@@ -76,8 +82,12 @@ class MainWindow(QMainWindow):
         self.show()
 
     def Launch(self):
+        time, settings = self.fetchPageSettings()
+
+        self.settingsUpdateTime = time
+
         self.hide()
-        self.generatePageWindows()
+        self.generatePageWindows(settings)
 
         self.timeoutTimer.stop()
         self.timeoutBar.hide()
@@ -92,9 +102,24 @@ class MainWindow(QMainWindow):
 
         self.timeoutBar.setValue(self.countdown)
 
-    def generatePageWindows(self):
+    def checkForUpdates(self):
+        time, settings = self.fetchPageSettings()
+
+        if time > self.settingsUpdateTime:
+            print "Updaing"
+            self.settingsUpdateTime = time
+            self.show() #Hack
+            self.closeAllPageWindows()
+            self.generatePageWindows(settings)
+            self.hide() #Hack
+        else:
+            print "Not Updating"
+
+
+
+    def generatePageWindows(self, settings):
         self.closeAllPageWindows()
-        for this_window in self.fetchPageSettings():
+        for this_window in settings:
             self.PageWindows.append(PageWindow(this_window))
 
     def closeAllPageWindows(self):
@@ -108,9 +133,8 @@ class MainWindow(QMainWindow):
 
     def fetchPageSettings(self):
         self.exoconn = Alias(str(self.settings.value('cik').toString()))
-        settingsString = self.exoconn.read(str(self.settings.value('alias').toString()))[0][1]
-        print settingsString
-        return json.loads(settingsString)
+        settingsTime, settingsString = self.exoconn.read(str(self.settings.value('alias').toString()))[0]
+        return int(settingsTime), json.loads(settingsString)
 
     def saveSettingsThenLaunch(self):
         self.settings.setValue('cik', self.cikInput.text())
