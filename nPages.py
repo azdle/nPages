@@ -29,6 +29,9 @@ class MainWindow(QMainWindow):
         ### Create Elements ###
         self.timeoutBar = QProgressBar()
         self.timeoutTimer = QTimer()
+        # There seems to be a bug in QWebView where pages get really slow/stop loading after
+        # awhile. Workaround to close windows and open new ones.
+        self.restartWorkaroundTimer = QTimer()
 
         self.cikInput = QLineEdit(self.settings.value('cik').toString())
         self.aliasInput = QLineEdit(self.settings.value('alias').toString())
@@ -58,6 +61,9 @@ class MainWindow(QMainWindow):
         self.timeoutTimer.timeout.connect(self.WindowTimerTick)
         self.timeoutTimer.start(100)
         self.countdown = 100
+
+        self.restartWorkaroundTimer.timeout.connect(self.ReLaunch)
+        self.restartWorkaroundTimer.start(3600000)
 
         self.continueButton.clicked.connect(self.Launch)
         self.saveButton.clicked.connect(self.saveSettingsThenLaunch)
@@ -91,6 +97,13 @@ class MainWindow(QMainWindow):
 
         self.timeoutTimer.stop()
         self.timeoutBar.hide()
+
+    def ReLaunch(self):
+        time, settings = self.fetchPageSettings()
+
+        self.settingsUpdateTime = time
+
+        self.generatePageWindows(settings)
 
     def WindowTimerTick(self):
         if self.cikInput.text().length() != 40 or self.aliasInput.text().length() == 0:
