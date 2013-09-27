@@ -41,6 +41,7 @@ class MainWindow(QMainWindow):
 
         self.saveButton = QPushButton("Save Settings")
         self.continueButton = QPushButton("Use Existing Settings")
+        self.quitButton = QPushButton("Quit Application")
 
         self.saveButtonBox = QHBoxLayout()
         self.formLayout = QFormLayout()
@@ -67,6 +68,7 @@ class MainWindow(QMainWindow):
 
         self.continueButton.clicked.connect(self.Launch)
         self.saveButton.clicked.connect(self.saveSettingsThenLaunch)
+        self.quitButton.clicked.connect(app.quit)
 
         ### Layout Elements ###
         self.formLayout.addRow(self.cikLabel, self.cikInput)
@@ -77,8 +79,9 @@ class MainWindow(QMainWindow):
         self.saveButtonBox.addWidget(self.saveButton)
 
         self.mainLayout.addWidget(self.formGroup)
-        self.mainLayout.addItem(self.saveButtonBox)
         self.mainLayout.addWidget(self.timeoutBar)
+        self.mainLayout.addItem(self.saveButtonBox)
+        self.mainLayout.addWidget(self.quitButton)
 
         self.centralWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.centralWidget)
@@ -178,13 +181,8 @@ class PageWindow(QWebView):
 
         print("Loading:"+url)
         self.load(QUrl(url))
-
-def main(args):
-    app = QApplication(args)
-    win = MainWindow()
-    app.connect(app, SIGNAL("lastWindowClosed()"),
-                app, SLOT("quit()"))
-    app.exec_()
   
 if __name__=="__main__":
-        main(sys.argv)
+    app = QApplication(sys.argv)
+    win = MainWindow()
+    app.exec_()
