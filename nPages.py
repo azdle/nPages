@@ -14,12 +14,19 @@ class MainWindow(QMainWindow):
         self.settings = QSettings("Exosite", "nPages")
         self.settingsUpdateTime = 0
 
+        ### Setup Tray Menu ###
+        self.systemTrayMenu = QMenu(self)
+        self.systemTrayMenu.addAction("Settings", self.show)
+        self.systemTrayMenu.addAction("Close All Windows", self.closeAllPageWindows)
+        self.systemTrayMenu.addAction("Quit", app.quit, "Ctrl+q")
+
         ### Setup Tray Icon ###
         self.systemTrayIcon = QSystemTrayIcon(self)
         self.systemTrayIcon.setIcon(QIcon.fromTheme("face-smile"))
         self.systemTrayIcon.setToolTip("nPages")
         self.systemTrayIcon.setVisible(True)
         self.systemTrayIcon.activated.connect(self.handleSystemTrayIconActivation)
+        self.systemTrayIcon.setContextMenu(self.systemTrayMenu)
 
         ### Setup Update Timer ###
         self.updateTimer = QTimer()
