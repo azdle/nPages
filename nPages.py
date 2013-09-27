@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
         self.updateTimer.start(60000) #Check every minute, make this configurable.
         self.updateTimer.timeout.connect(self.checkForUpdates)
 
-        ### Create Elements ###
+        ### Create Window Elements ###
         self.timeoutBar = QProgressBar()
         self.timeoutTimer = QTimer()
         # There seems to be a bug in QWebView where pages get really slow/stop loading after
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         self.mainLayout = QVBoxLayout()
         self.centralWidget = QWidget()
 
-        ### Setup Elements ###
+        ### Setup Window Elements ###
         self.cikInput.setMinimumSize(QSize(325, 0))
 
         self.timeoutBar.setTextVisible(False)
@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
         self.saveButton.clicked.connect(self.saveSettingsThenLaunch)
         self.quitButton.clicked.connect(app.quit)
 
-        ### Layout Elements ###
+        ### Layout Window Elements ###
         self.formLayout.addRow(self.cikLabel, self.cikInput)
         self.formLayout.addRow(self.aliasLabel, self.aliasInput)
         self.formGroup.setLayout(self.formLayout)
@@ -93,8 +93,10 @@ class MainWindow(QMainWindow):
         self.centralWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.centralWidget)
 
+        ### Init Local Objects ###
         self.PageWindows = []
 
+        ### All Systems GO! ###
         self.show()
 
     def Launch(self):
