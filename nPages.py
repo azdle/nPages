@@ -4,12 +4,14 @@ import sys, json
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
-from pyonep.alias import Alias
+from exoline.exo import ExoRPC
 
 class MainWindow(QMainWindow):
 
     def __init__(self, *args):
         super(MainWindow, self).__init__(*args)
+
+        self.exo = ExoRPC(https=True)
 
         self.settings = QSettings("Exosite", "nPages")
         self.settingsUpdateTime = 0
@@ -157,8 +159,9 @@ class MainWindow(QMainWindow):
             self.setVisible(not self.isVisible())
 
     def fetchPageSettings(self):
-        self.exoconn = Alias(str(self.settings.value('cik').toString()))
-        settingsTime, settingsString = self.exoconn.read(str(self.settings.value('alias').toString()))[0]
+        cik = str(self.settings.value('cik').toString())
+        alias = str(self.settings.value('alias').toString())
+        settingsTime, settingsString = self.exo.read(cik, {"alias":alias}, limit=1, sort='desc')[0]
         return int(settingsTime), json.loads(settingsString)
 
     def saveSettingsThenLaunch(self):
