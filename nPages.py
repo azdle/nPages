@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
         time, settings = self.fetchPageSettings()
 
         if time > self.settingsUpdateTime:
-            print "Updaing"
+            print "Updating"
             self.settingsUpdateTime = time
             self.show() #Hack
             self.closeAllPageWindows()
